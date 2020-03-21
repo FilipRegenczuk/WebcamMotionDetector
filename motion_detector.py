@@ -19,7 +19,11 @@ while True:
     # comparing difference
     delta_frame = cv2.absdiff(first_frame, gray)
 
-    cv2.imshow("Capturing", delta_frame)
+    tresh_delta_frame = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
+
+    cv2.imshow("Gray Frame", gray)
+    cv2.imshow("Delta Frame", delta_frame)
+    cv2.imshow("Treshold Frame", tresh_delta_frame)
     key = cv2.waitKey(1)
 
     if key == ord('q'):

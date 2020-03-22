@@ -1,9 +1,11 @@
 import cv2
+import pandas
 from datetime import datetime
 
 first_frame = None
 status_list = [None, None]
 presence_list = []
+df = pandas.DataFrame(columns=["Start", "End"])
 
 video = cv2.VideoCapture(0)
 
@@ -57,6 +59,11 @@ while True:
         break
     
 print(presence_list)
+
+for i in range(0, len(presence_list), 2):
+    df = df.append({"Start":presence_list[i], "End":presence_list[i+1]}, ignore_index = True)
+
+df.to_csv("presence.csv")
 
 video.release()
 cv2.destroyAllWindows

@@ -3,7 +3,7 @@ from datetime import datetime
 
 first_frame = None
 status_list = [None, None]
-conjuring_list = []
+presence_list = []
 
 video = cv2.VideoCapture(0)
 
@@ -39,10 +39,10 @@ while True:
     status_list.append(status)
 
     if status_list[-1] == 1 and status_list[-2] == 0:
-        conjuring_list.append(datetime.now())
+        presence_list.append(datetime.now())
     
     if status_list[-1] == 0 and status_list[-2] == 1:
-        conjuring_list.append(datetime.now())
+        presence_list.append(datetime.now())
 
 
     cv2.imshow("Gray Frame", blurred_gray)
@@ -53,10 +53,10 @@ while True:
 
     if key == ord('q'):
         if status == 1:
-            conjuring_list.append(datetime.now())
+            presence_list.append(datetime.now())
         break
     
-print(conjuring_list)
+print(presence_list)
 
 video.release()
 cv2.destroyAllWindows

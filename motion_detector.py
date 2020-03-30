@@ -52,7 +52,7 @@ class MotionDetector(object):
             if status_list[-1] == 0 and status_list[-2] == 1:
                 presence_list.append(datetime.now())
 
-
+            # display frames
             cv2.imshow("Gray Frame", blurred_gray)
             cv2.imshow("Delta Frame", delta_frame)
             cv2.imshow("Treshold Frame", tresh_frame)

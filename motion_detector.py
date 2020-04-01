@@ -37,7 +37,7 @@ class MotionDetector(object):
             
             # discard small contours
             for contour in cnts:
-                if cv2.contourArea(contour) < 1000:
+                if cv2.contourArea(contour) < 10000:
                     continue
                 
                 status = 1

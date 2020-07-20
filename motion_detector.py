@@ -2,7 +2,7 @@ import cv2
 import pandas as pd
 from datetime import datetime
 from bokeh.plotting import figure, show, output_file
-from bokeh.models import HoverTool
+from bokeh.models import HoverTool, ColumnDataSource
 
 
 class MotionDetector(object):
@@ -70,16 +70,25 @@ class MotionDetector(object):
 
         print(presence_list)
 
+        # Saving CSV file
         for i in range(0, len(presence_list), 2):
             df = df.append({"Start":presence_list[i], "End":presence_list[i+1]}, ignore_index = True)
 
         df.to_csv("presence.csv")
 
         # Plotting in bokeh
+        df["Start_string"] = df["Start"].dt.strftime("%Y-%m-%d %H:%M:%S")
+        df["End_string"] = df["End"].dt.strftime("%Y-%m-%d %H:%M:%S")
+        cds = ColumnDataSource(df)
+
         f = figure(x_axis_type='datetime', height=200, sizing_mode="scale_width", title="Motion Graph")
         f.yaxis.minor_tick_line_color = None
         f.yaxis.ticker.desired_num_ticks = 1
-        q = f.quad(left=df["Start"], right=df["End"], bottom=0, top=1, color="green")
+        
+        hover = HoverTool(tooltips=[("Start", "@Start_string"), ("End", "@End_string")])
+        f.add_tools(hover)
+
+        q = f.quad(left="Start", right="End", bottom=0, top=1, color="green", source=cds)
 
         output_file("Graph.html")
         show(f)

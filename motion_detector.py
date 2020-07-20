@@ -1,6 +1,7 @@
 import cv2
 import pandas
 from datetime import datetime
+from bokeh.plotting import figure, show, output_file
 
 class MotionDetector(object):
 
@@ -29,7 +30,7 @@ class MotionDetector(object):
             
             # image operations:
             delta_frame = cv2.absdiff(first_frame, blurred_gray)                        # comparing difference
-            tresh_frame = cv2.threshold(delta_frame, 50, 255, cv2.THRESH_BINARY)[1]     # adding treshold effect
+            tresh_frame = cv2.threshold(delta_frame, 60, 255, cv2.THRESH_BINARY)[1]     # adding treshold effect
             tresh_frame = cv2.dilate(tresh_frame, None, iterations=2)                   # clearing frame
 
             # touple of contours
@@ -64,12 +65,19 @@ class MotionDetector(object):
                     presence_list.append(datetime.now())
                 break
             
+
         print(presence_list)
 
         for i in range(0, len(presence_list), 2):
             df = df.append({"Start":presence_list[i], "End":presence_list[i+1]}, ignore_index = True)
 
         df.to_csv("presence.csv")
+
+        f = figure(x_axis_type='datetime', height=200, sizing_mode="scale_width", title="Motion Graph")
+        q = f.quad(left=df["Start"], right=df["End"], bottom=0, top=1, color="green")
+
+        output_file("Graph.html")
+        show(f)
 
         video.release()
         cv2.destroyAllWindows

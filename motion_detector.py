@@ -1,7 +1,9 @@
 import cv2
-import pandas
+import pandas as pd
 from datetime import datetime
 from bokeh.plotting import figure, show, output_file
+from bokeh.models import HoverTool
+
 
 class MotionDetector(object):
 
@@ -10,7 +12,7 @@ class MotionDetector(object):
         first_frame = None          # first_frame saves background
         status_list = [None, None]  # list recording presence of object
         presence_list = []          # list recording every appearing and disappearing of object
-        df = pandas.DataFrame(columns=["Start", "End"])
+        df = pd.DataFrame(columns=["Start", "End"])
 
         video = cv2.VideoCapture(0)
 
@@ -73,7 +75,10 @@ class MotionDetector(object):
 
         df.to_csv("presence.csv")
 
+        # Plotting in bokeh
         f = figure(x_axis_type='datetime', height=200, sizing_mode="scale_width", title="Motion Graph")
+        f.yaxis.minor_tick_line_color = None
+        f.yaxis.ticker.desired_num_ticks = 1
         q = f.quad(left=df["Start"], right=df["End"], bottom=0, top=1, color="green")
 
         output_file("Graph.html")

@@ -32,7 +32,7 @@ class MotionDetector(object):
             
             # image operations:
             delta_frame = cv2.absdiff(first_frame, blurred_gray)                        # comparing difference
-            tresh_frame = cv2.threshold(delta_frame, 60, 255, cv2.THRESH_BINARY)[1]     # adding treshold effect
+            tresh_frame = cv2.threshold(delta_frame, 40, 255, cv2.THRESH_BINARY)[1]     # adding treshold effect
             tresh_frame = cv2.dilate(tresh_frame, None, iterations=2)                   # clearing frame
 
             # touple of contours
